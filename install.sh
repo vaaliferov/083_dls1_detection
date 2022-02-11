@@ -17,7 +17,7 @@ sed -i "s/<name>/$NAME/g" $SERVICE_FILE_PATH
 sed -i "s/<user>/$USER/g" $SERVICE_FILE_PATH
 
 mkdir $DIR $DIR/env
-apt install libfreetype6-dev
+apt install -y libfreetype6-dev
 apt install -y python3-pip python3-venv
 pip3 install -U virtualenv
 
