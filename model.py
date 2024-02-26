@@ -1,5 +1,6 @@
 import numpy as np
 import onnxruntime
+
 from PIL import Image, ImageDraw
 from PIL import ImageFont, ImageOps
 
@@ -118,7 +119,7 @@ def non_max_suppression(prediction, conf_thres, iou_thres):
     return output
 
 def draw_one_box(draw, box, color, label, font, margin=4, width=2):
-    w, h = font.getsize(label)
+    _, _, w, h = font.getbbox(label)
     text_box = (box[0] + margin, box[1] + margin)
     plate_box = (box[0], box[1], box[0] + w + margin * 2, box[1] + h + margin * 2)
     draw.rectangle(box, fill=None, outline=color, width=width)
@@ -134,27 +135,30 @@ class Model:
         self.labels = load_labels(labels_path)
         self.font = load_font(FONT_PATH, FONT_SIZE)
 
-    def detect(self, image, conf_thres=0.25, iou_thres=0.45):
+    def detect(self, path, conf_thres=0.25, iou_thres=0.45):
+
+        image = Image.open(path)
 
         im = image.copy()
         im = ImageOps.exif_transpose(im)
         im = ImageOps.expand(im, pad_image(im))
-        im.thumbnail((640,640), Image.ANTIALIAS)
-        # im = im.resize((640,640))
-    
-        x = np.array(im) / 255.
-        x = np.float32(x)
+        im.thumbnail((640,640), Image.LANCZOS)
+
+        x = np.float32(np.array(im) / 255.)
+        
         x = x.transpose(2,0,1)
         x = x.reshape((1,) + x.shape)
-
-        draw = ImageDraw.Draw(image) # im, image
+        
         outs = self.model.run(None, {self.model.get_inputs()[0].name: x})
+        
         det = non_max_suppression(outs[0], conf_thres, iou_thres)[0]
-        det[:,:4] = scale_coords((640,640), det[:,:4], image.size[::-1]).round() # im, image
-    
+        det[:,:4] = scale_coords((640,640), det[:,:4], image.size[::-1]).round()
+
+        draw = ImageDraw.Draw(image)
+
         for *box, conf, cls in det:
             color = get_color(int(cls))
             label = (f'{self.labels[int(cls)]} {conf:.2f}')
             draw_one_box(draw, box, color, label, self.font)
 
-        return image # im, image
+        image.save(path)

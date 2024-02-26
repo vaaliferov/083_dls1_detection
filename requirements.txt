@@ -1,4 +1,5 @@
-numpy
-pillow
-onnxruntime
-python-telegram-bot
+gdown==5.1.0
+numpy==1.26.4
+pillow==10.2.0
+onnxruntime==1.17.1
+python-telegram-bot==20.8
