@@ -1,7 +1,7 @@
 ### DLS1_DETECTION [:link:](https://stepik.org/course/101721/syllabus)
 
 * model: [YOLOv5](https://github.com/ultralytics/yolov5) pretrained on [MS COCO](https://cocodataset.org/#home)
-* deployment: vm instance on [oracle cloud](https://www.oracle.com/cloud)
+* runtime: [Open Neural Network Exchange (ONNX)](https://github.com/onnx/onnx)
 * demo: https://t.me/vaaliferov_detector_bot
 
 ```bash
