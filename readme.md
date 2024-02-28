@@ -1,4 +1,4 @@
-### DLS1_DETECTION [:link:](https://stepik.org/course/101721/syllabus)
+### Object Detector (MSCOCO) [:link:](https://stepik.org/course/101721/syllabus)
 
 * model: [YOLOv5](https://github.com/ultralytics/yolov5) pretrained on [MS COCO](https://cocodataset.org/#home)
 * runtime: [Open Neural Network Exchange (ONNX)](https://github.com/onnx/onnx)
